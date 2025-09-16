@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Insert Index</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(0,0,0,0.3);
+      padding: 25px 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+    }
+    input {
+      width: 90%;
+    }
+    button {
+      background-color: #ff9800;
+      color: #fff;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #e68900;
+    }
+    .result {
+      margin-top: 15px;
+      background: rgba(255,255,255,0.1);
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Find Index to Insert Number</h2>
+    <input type="text" id="arrayInput" placeholder="Enter array, e.g., 10,20,30">
+    <input type="number" id="numInput" placeholder="Enter number to insert">
+    <button onclick="calculateIndex()">Find Index</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    function getIndexToIns(arr, num) {
+      arr.sort((a, b) => a - b);
+      const index = arr.findIndex(value => num <= value);
+      return index === -1 ? arr.length : index;
+    }
+
+    function calculateIndex() {
+      const arrStr = document.getElementById("arrayInput").value;
+      const num = parseFloat(document.getElementById("numInput").value);
+      if (!arrStr) {
+        document.getElementById("result").textContent = "Please enter a valid array.";
+        return;
+      }
+      if (isNaN(num)) {
+        document.getElementById("result").textContent = "Please enter a valid number.";
+        return;
+      }
+
+      const arr = arrStr.split(",").map(Number);
+      const index = getIndexToIns(arr, num);
+      document.getElementById("result").textContent = `Insert ${num} at index: ${index}`;
+    }
+  </script>
+</body>
+</html>

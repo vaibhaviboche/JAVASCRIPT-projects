@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lunch Menu Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      background: #fff;
+      color: #333;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #a64ca6;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 8px 0;
+      width: 70%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      background: #a64ca6;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #903d90;
+    }
+
+    #menuOutput {
+      margin-top: 20px;
+      font-size: 16px;
+      min-height: 40px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍽️ Lunch Menu Manager</h1>
+
+    <input type="text" id="lunchInput" placeholder="Enter lunch item">
+    <br>
+    <button onclick="addLunchToEndUI()">Add to End</button>
+    <button onclick="addLunchToStartUI()">Add to Start</button>
+    <br>
+    <button onclick="removeLastLunchUI()">Remove Last</button>
+    <button onclick="removeFirstLunchUI()">Remove First</button>
+    <br>
+    <button onclick="getRandomLunchUI()">Random Lunch</button>
+    <button onclick="showLunchMenuUI()">Show Menu</button>
+
+    <p id="menuOutput"></p>
+  </div>
+
+  <script>
+    // Step 1: Initialize lunches array
+    let lunches = [];
+
+    // Add lunch to end
+    function addLunchToEnd(item) {
+      lunches.push(item);
+      return `${item} added to the end of the lunch menu.`;
+    }
+
+    // Add lunch to start
+    function addLunchToStart(item) {
+      lunches.unshift(item);
+      return `${item} added to the start of the lunch menu.`;
+    }
+
+    // Remove last lunch
+    function removeLastLunch() {
+      if (lunches.length === 0) return "No lunches to remove.";
+      const removed = lunches.pop();
+      return `${removed} removed from the end of the lunch menu.`;
+    }
+
+    // Remove first lunch
+    function removeFirstLunch() {
+      if (lunches.length === 0) return "No lunches to remove.";
+      const removed = lunches.shift();
+      return `${removed} removed from the start of the lunch menu.`;
+    }
+
+    // Get random lunch
+    function getRandomLunch() {
+      if (lunches.length === 0) return "No lunches available.";
+      const randomIndex = Math.floor(Math.random() * lunches.length);
+      return `Randomly selected lunch: ${lunches[randomIndex]}`;
+    }
+
+    // Show lunch menu
+    function showLunchMenu() {
+      if (lunches.length === 0) return "The menu is empty.";
+      return `Menu items: ${lunches.join(", ")}`;
+    }
+
+    // UI Functions
+    const output = document.getElementById("menuOutput");
+    const input = document.getElementById("lunchInput");
+
+    function addLunchToEndUI() {
+      const item = input.value.trim();
+      if (!item) { output.textContent = "Enter a lunch item."; return; }
+      output.textContent = addLunchToEnd(item);
+      input.value = "";
+    }
+
+    function addLunchToStartUI() {
+      const item = input.value.trim();
+      if (!item) { output.textContent = "Enter a lunch item."; return; }
+      output.textContent = addLunchToStart(item);
+      input.value = "";
+    }
+
+    function removeLastLunchUI() {
+      output.textContent = removeLastLunch();
+    }
+
+    function removeFirstLunchUI() {
+      output.textContent = removeFirstLunch();
+    }
+
+    function getRandomLunchUI() {
+      output.textContent = getRandomLunch();
+    }
+
+    function showLunchMenuUI() {
+      output.textContent = showLunchMenu();
+    }
+  </script>
+</body>
+</html>

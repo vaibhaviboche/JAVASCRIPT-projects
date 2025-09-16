@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mutation Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 440px;
+      text-align: center;
+    }
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mutation Checker</h1>
+
+  <div class="container">
+    <input id="firstWord" type="text" placeholder="Enter first word" value="hello" />
+    <input id="secondWord" type="text" placeholder="Enter second word" value="hey" />
+    <button onclick="checkMutation()">Check</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function mutation(arr) {
+      const first = arr[0].toLowerCase();
+      const second = arr[1].toLowerCase();
+
+      for (let char of second) {
+        if (!first.includes(char)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function checkMutation() {
+      const word1 = document.getElementById('firstWord').value.trim();
+      const word2 = document.getElementById('secondWord').value.trim();
+
+      if (!word1 || !word2) {
+        document.getElementById('result').textContent = "❌ Please enter both words.";
+        return;
+      }
+
+      const isMutation = mutation([word1, word2]);
+      document.getElementById('result').textContent = isMutation
+        ? `✅ All letters in "${word2}" are present in "${word1}".`
+        : `❌ Not all letters in "${word2}" are present in "${word1}".`;
+    }
+  </script>
+
+</body>
+</html>

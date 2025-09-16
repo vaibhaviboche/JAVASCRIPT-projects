@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Customer Complaint Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #form {
+      max-width: 70%;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      padding: 10px;
+    }
+
+    input {
+      border-color: rgb(118, 118, 118);
+    }
+
+    #personal-info input,
+    #product-info input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    fieldset {
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border-color: rgb(118, 118, 118);
+    }
+
+    textarea {
+      width: 100%;
+      border-color: rgb(118, 118, 118);
+    }
+
+    #btn-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #submit-btn,
+    #clear-btn {
+      margin: 10px 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Complaint Form</h1>
+  <form id="form">
+    <fieldset id="personal-info">
+      <div>
+        <label for="full-name">Full Name:</label>
+        <input type="text" id="full-name" name="full-name" placeholder="John Doe">
+      </div>
+
+      <div>
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" placeholder="example@domain.com">
+      </div>
+    </fieldset>
+    <hr>
+    <fieldset id="product-info">
+      <div>
+        <label for="order-no">Order No:</label>
+        <input type="text" id="order-no" name="order-no" placeholder="2024######">
+      </div>
+      <div>
+        <label for="product-code">Product Code:</label>
+        <input type="text" id="product-code" name="product-code" placeholder="XX##-X###-XX#">
+      </div>
+      <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1">
+      </div>
+    </fieldset>
+
+    <fieldset id="complaints-group">
+      <legend>Complaint Reason:</legend>
+      <div>
+        <input type="checkbox" id="damaged-product" name="complaint" value="damaged-product">
+        <label for="damaged-product">Damaged Product</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="nonconforming-product" name="complaint" value="nonconforming-product">
+        <label for="nonconforming-product">Nonconforming Product</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="delayed-dispatch" name="complaint" value="delayed-dispatch">
+        <label for="delayed-dispatch">Delayed Dispatch</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="other-complaint" name="complaint" value="other">
+        <label for="other-complaint">Other</label>
+      </div>
+    </fieldset>
+
+    <div id="complaint-description-container">
+      <legend>Description of Complaint Reason</legend>
+      <textarea placeholder="Describe the reason of your complaint in at least 20 characters"
+        name="complaint-textarea" id="complaint-description"></textarea>
+    </div>
+
+    <fieldset id="solutions-group">
+      <legend>Desired Solution</legend>
+      <input type="radio" name="solutions" id="refund" value="refund">
+      <label for="refund">Refund</label>
+
+      <input type="radio" name="solutions" id="exchange" value="exchange">
+      <label for="exchange">Exchange</label>
+
+      <input type="radio" name="solutions" id="other-solution" value="other">
+      <label for="other-solution">Other</label>
+    </fieldset>
+
+    <div id="solution-description-container">
+      <legend>Description of Desired Solution</legend>
+      <textarea placeholder="Describe the desired solution to your issue in at least 20 characters"
+        name="solution-textarea" id="solution-description"></textarea>
+    </div>
+    <div id="btn-container">
+      <button type="submit" id="submit-btn">Submit</button>
+      <span id="message-box" aria-live="polite"></span>
+    </div>
+  </form>
+
+  <script>
+    const complaintForm = document.getElementById('form');
+    const submitButton = document.getElementById('submit-btn');
+
+    let formSubmitted = false;
+
+    function validateForm() {
+      const fullName = document.getElementById('full-name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const orderNumber = document.getElementById('order-no').value.trim();
+      const productCode = document.getElementById('product-code').value.trim();
+      const quantity = document.getElementById('quantity').value.trim();
+      const complaintsGroup = document.querySelectorAll('#complaints-group input[type=checkbox]');
+      const complaintDescription = document.getElementById('complaint-description').value.trim();
+      const solutionsGroup = document.querySelectorAll('#solutions-group input[type=radio]');
+      const solutionDescription = document.getElementById('solution-description').value.trim();
+
+      const otherComplaint = document.getElementById('other-complaint');
+      const otherSolution = document.getElementById('other-solution');
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const orderNoRegex = /^2024\d{6}$/;
+      const productCodeRegex = /^[A-Za-z]{2}\d{2}-[A-Za-z]\d{3}-[A-Za-z]{2}\d$/;
+
+      const validationResults = {
+        "full-name": fullName !== '',
+        'email': emailRegex.test(email),
+        'order-no': orderNoRegex.test(orderNumber),
+        'product-code': productCodeRegex.test(productCode),
+        'quantity': quantity > 0,
+        'complaints-group': Array.from(complaintsGroup).some(checkbox => checkbox.checked),
+        'complaint-description': !otherComplaint.checked || complaintDescription.length >= 20,
+        'solutions-group': Array.from(solutionsGroup).some(radio => radio.checked),
+        'solution-description': !otherSolution.checked || solutionDescription.length >= 20,
+      };
+      return validationResults;
+    }
+
+    function isValid(validationResults) {
+      return (
+        validationResults["full-name"] &&
+        validationResults["email"] &&
+        validationResults["order-no"] &&
+        validationResults["product-code"] &&
+        validationResults["quantity"] &&
+        validationResults["complaints-group"] &&
+        validationResults["complaint-description"] &&
+        validationResults["solutions-group"] &&
+        validationResults["solution-description"]
+      );
+    }
+
+    function handleChange(event) {
+      const target = event.target;
+      const validationResults = validateForm();
+
+      if (target.id === "full-name") {
+        target.style.borderColor = validationResults["full-name"] ? "green" : "red";
+      } else if (target.id === "email") {
+        target.style.borderColor = validationResults["email"] ? "green" : "red";
+      } else if (target.id === "order-no") {
+        target.style.borderColor = validationResults["order-no"] ? "green" : "red";
+      } else if (target.id === "product-code") {
+        target.style.borderColor = validationResults["product-code"] ? "green" : "red";
+      } else if (target.id === "quantity") {
+        target.style.borderColor = validationResults["quantity"] ? "green" : "red";
+      } else if (target.type === "checkbox" && target.closest("#complaints-group")) {
+        updateFieldsetBorder("complaints-group", "checkbox");
+      } else if (target.id === "complaint-description") {
+        target.style.borderColor = validationResults["complaint-description"] ? "green" : "red";
+      } else if (target.type === "radio" && target.closest("#solutions-group")) {
+        updateFieldsetBorder("solutions-group", "radio");
+      } else if (target.id === "solution-description") {
+        target.style.borderColor = validationResults["solution-description"] ? "green" : "red";
+      }
+    }
+
+    function updateFieldsetBorder(fieldsetId, inputType) {
+      const fieldset = document.getElementById(fieldsetId);
+      const inputs = document.querySelectorAll(`#${fieldsetId} input[type="${inputType}"]`);
+      const isChecked = Array.from(inputs).some(input => input.checked);
+
+      console.log(`Updating ${fieldsetId} border. Checked: ${isChecked}`);
+      fieldset.style.borderColor

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9966, #ff5e62);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 80px auto;
+      background: #fff;
+      color: #333;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #ff5e62;
+    }
+
+    textarea, input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #ff5e62;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #e04b4e;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      color: #333;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Grade Calculator</h1>
+    <textarea id="scores" placeholder="Enter class scores separated by commas (e.g. 92,88,77,60)"></textarea>
+    <input type="number" id="studentScore" placeholder="Enter your score">
+    <button id="calcBtn">Calculate</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function getAverage(scores) {
+      const total = scores.reduce((sum, score) => sum + score, 0);
+      return (total / scores.length).toFixed(1);
+    }
+
+    function getGrade(score) {
+      if (score === 100) return "A+";
+      if (score >= 90) return "A";
+      if (score >= 80) return "B";
+      if (score >= 70) return "C";
+      if (score >= 60) return "D";
+      return "F";
+    }
+
+    function hasPassingGrade(score) {
+      const grade = getGrade(score);
+      return grade !== "F";
+    }
+
+    function studentMsg(scores, studentScore) {
+      const average = getAverage(scores);
+      const grade = getGrade(studentScore);
+      const passed = hasPassingGrade(studentScore);
+      const status = passed ? "You passed the course." : "You failed the course.";
+      return `Class average: ${average}. Your grade: ${grade}. ${status}`;
+    }
+
+    document.getElementById("calcBtn").addEventListener("click", function () {
+      const scoresInput = document.getElementById("scores").value.trim();
+      const studentScore = parseInt(document.getElementById("studentScore").value);
+
+      if (!scoresInput || isNaN(studentScore)) {
+        document.getElementById("result").textContent = "Please enter valid class scores and your score.";
+        return;
+      }
+
+      const scores = scoresInput.split(",").map(num => parseInt(num.trim())).filter(n => !isNaN(n));
+
+      if (scores.length === 0) {
+        document.getElementById("result").textContent = "Please enter at least one valid class score.";
+        return;
+      }
+
+      document.getElementById("result").textContent = studentMsg(scores, studentScore);
+    });
+  </script>
+</body>
+</html>

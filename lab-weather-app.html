@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #eef6f9;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    #weather-app {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #weather-info {
+      margin-top: 1rem;
+    }
+
+    #weather-info p {
+      margin: 0.5rem 0;
+    }
+
+    #weather-icon {
+      display: block;
+      margin: 1rem auto;
+      width: 80px;
+      height: 80px;
+    }
+  </style>
+</head>
+<body>
+  <div id="weather-app">
+    <select id="city-select">
+      <option value=""></option>
+      <option value="new york">New York</option>
+      <option value="los angeles">Los Angeles</option>
+      <option value="chicago">Chicago</option>
+      <option value="paris">Paris</option>
+      <option value="tokyo">Tokyo</option>
+      <option value="london">London</option>
+    </select>
+
+    <button id="get-weather-btn">Get Weather</button>
+
+    <div id="weather-info">
+      <img id="weather-icon" alt="Weather Icon" />
+      <p id="main-temperature"></p>
+      <p id="feels-like"></p>
+      <p id="humidity"></p>
+      <p id="wind"></p>
+      <p id="wind-gust"></p>
+      <p id="weather-main"></p>
+      <p id="location"></p>
+    </div>
+  </div>
+
+  <script>
+    async function getWeather(city) {
+      try {
+        const cityEncoded = encodeURIComponent(city.trim());
+        const response = await fetch(`https://weather-proxy.freecodecamp.rocks/api/city/${cityEncoded}`);
+        if (!response.ok) throw new Error('API error');
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(error);
+        return undefined;
+      }
+    }
+
+    async function showWeather(city) {
+      const data = await getWeather(city);
+      if (!data) {
+        alert('Something went wrong, please try again later.');
+        return;
+      }
+
+      const weather = data.weather?.[0] || {};
+      const main = data.main || {};
+      const wind = data.wind || {};
+
+      document.getElementById('weather-icon').src = weather.icon || '';
+      document.getElementById('main-temperature').textContent =
+        main.temp !== undefined ? `Temperature: ${main.temp} °C` : 'Temperature: N/A';
+      document.getElementById('feels-like').textContent =
+        main.feels_like !== undefined ? `Feels Like: ${main.feels_like} °C` : 'Feels Like: N/A';
+      document.getElementById('humidity').textContent =
+        main.humidity !== undefined ? `Humidity: ${main.humidity}%` : 'Humidity: N/A';
+      document.getElementById('wind').textContent =
+        wind.speed !== undefined ? `Wind Speed: ${wind.speed} m/s` : 'Wind Speed: N/A';
+      document.getElementById('wind-gust').textContent =
+        wind.gust !== undefined ? `Wind Gust: ${wind.gust} m/s` : 'Wind Gust: N/A';
+      document.getElementById('weather-main').textContent =
+        weather.main ? `Weather: ${weather.main}` : 'Weather: N/A';
+      document.getElementById('location').textContent =
+        data.name ? `Location: ${data.name}` : 'Location: N/A';
+    }
+
+    document.getElementById('get-weather-btn').addEventListener('click', () => {
+      const city = document.getElementById('city-select').value;
+      if (city) {
+        showWeather(city);
+      }
+    });
+  </script>
+</body>
+</html>

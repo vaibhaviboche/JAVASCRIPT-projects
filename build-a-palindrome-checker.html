@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palindrome Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .palindrome-checker {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    #text-input {
+      width: 80%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #check-btn {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="palindrome-checker">
+    <h1>Palindrome Checker</h1>
+    <input id="text-input" type="text" placeholder="Enter text to check..." />
+    <button id="check-btn">Check</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    document.getElementById("check-btn").addEventListener("click", () => {
+      const inputEl = document.getElementById("text-input");
+      const resultEl = document.getElementById("result");
+      const originalText = inputEl.value;
+
+      if (!originalText.trim()) {
+        alert("Please input a value");
+        return;
+      }
+
+      const cleaned = originalText.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+      const reversed = cleaned.split("").reverse().join("");
+      const isPalindrome = cleaned === reversed;
+
+      resultEl.textContent = `${originalText} is${isPalindrome ? "" : " not"} a palindrome.`;
+    });
+  </script>
+</body>
+</html>

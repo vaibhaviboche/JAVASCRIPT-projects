@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Permutations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 50px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #1e3c72;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #1e3c72;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #14568a;
+    }
+
+    #results {
+      margin-top: 20px;
+      text-align: left;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+      word-break: break-all;
+    }
+
+    #results li {
+      margin-bottom: 5px;
+      list-style-type: decimal;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>String Permutations</h1>
+    <input type="text" id="inputString" placeholder="Enter a string">
+    <br>
+    <button onclick="generatePermutations()">Generate</button>
+    <ul id="results"></ul>
+  </div>
+
+  <script>
+    function permuteString(str, prefix = "", results = []) {
+      if (str.length === 0) {
+        results.push(prefix);
+        return results;
+      }
+
+      for (let i = 0; i < str.length; i++) {
+        const remaining = str.slice(0, i) + str.slice(i + 1);
+        permuteString(remaining, prefix + str[i], results);
+      }
+
+      if (prefix === "") {
+        return [...new Set(results)]; // unique permutations
+      }
+
+      return results;
+    }
+
+    function generatePermutations() {
+      const str = document.getElementById("inputString").value.trim();
+      const resultsContainer = document.getElementById("results");
+      resultsContainer.innerHTML = "";
+
+      if (!str) {
+        resultsContainer.innerHTML = "<li>Enter a string to see permutations</li>";
+        return;
+      }
+
+      const permutations = permuteString(str);
+      permutations.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = p;
+        resultsContainer.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

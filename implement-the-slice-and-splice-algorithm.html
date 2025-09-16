@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FrankenSplice Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 500px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>FrankenSplice Demo</h1>
+
+  <div class="container">
+    <input id="array1" type="text" placeholder='Enter first array (e.g. [1,2,3])' value='[1,2,3]' />
+    <input id="array2" type="text" placeholder='Enter second array (e.g. [4,5])' value='[4,5]' />
+    <input id="index" type="number" placeholder="Enter index (e.g. 1)" value="1" />
+    <button onclick="runFrankenSplice()">Splice Arrays</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function frankenSplice(arr1, arr2, index) {
+      let result = arr2.slice();
+      result.splice(index, 0, ...arr1);
+      return result;
+    }
+
+    function runFrankenSplice() {
+      try {
+        const arr1 = JSON.parse(document.getElementById('array1').value);
+        const arr2 = JSON.parse(document.getElementById('array2').value);
+        const index = parseInt(document.getElementById('index').value);
+
+        if (!Array.isArray(arr1) || !Array.isArray(arr2) || isNaN(index)) {
+          document.getElementById('result').textContent = "❌ Please enter valid arrays and index.";
+          return;
+        }
+
+        const output = frankenSplice(arr1, arr2, index);
+        document.getElementById('result').textContent = "✅ Result: " + JSON.stringify(output);
+      } catch {
+        document.getElementById('result').textContent = "❌ Invalid input format. Use valid JSON arrays.";
+      }
+    }
+  </script>
+
+</body>
+</html>

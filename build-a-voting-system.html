@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel Poll</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #444;
+    }
+    .container {
+      max-width: 600px;
+      margin: 25px auto;
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, button, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #results {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-line;
+      min-height: 80px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Travel Poll</h1>
+  <div class="container">
+
+    <h3>Add Poll Option</h3>
+    <input type="text" id="optionInput" placeholder="Enter a country name">
+    <button id="addOptionBtn">Add Option</button>
+
+    <h3>Vote</h3>
+    <select id="voteSelect"></select>
+    <input type="text" id="voterId" placeholder="Enter your voter ID">
+    <button id="voteBtn">Vote</button>
+
+    <h3>Poll Results</h3>
+    <div id="results"></div>
+
+  </div>
+
+  <script>
+    // Poll system logic
+    const poll = new Map();
+
+    function addOption(option) {
+      if (!option || option.trim() === "") {
+        return "Option cannot be empty.";
+      }
+      if (poll.has(option)) {
+        return \`Option "\${option}" already exists.\`;
+      }
+      poll.set(option, new Set());
+      return \`Option "\${option}" added to the poll.\`;
+    }
+
+    function vote(option, voterId) {
+      if (!poll.has(option)) {
+        return \`Option "\${option}" does not exist.\`;
+      }
+      const voters = poll.get(option);
+      if (voters.has(voterId)) {
+        return \`Voter \${voterId} has already voted for "\${option}".\`;
+      }
+      voters.add(voterId);
+      return \`Voter \${voterId} voted for "\${option}".\`;
+    }
+
+    function displayResults() {
+      let result = "Poll Results:\\n";
+      for (const [option, voters] of poll.entries()) {
+        result += \`\${option}: \${voters.size} votes\\n\`;
+      }
+      return result.trim();
+    }
+
+    // UI handling
+    const optionInput = document.getElementById('optionInput');
+    const addOptionBtn = document.getElementById('addOptionBtn');
+    const voteSelect = document.getElementById('voteSelect');
+    const voterIdInput = document.getElementById('voterId');
+    const voteBtn = document.getElementById('voteBtn');
+    const resultsDiv = document.getElementById('results');
+
+    function refreshSelect() {
+      voteSelect.innerHTML = "";
+      for (const option of poll.keys()) {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.textContent = option;
+        voteSelect.appendChild(opt);
+      }
+    }
+
+    function refreshResults() {
+      resultsDiv.textContent = displayResults();
+    }
+
+    addOptionBtn.addEventListener('click', () => {
+      const msg = addOption(optionInput.value.trim());
+      alert(msg);
+      optionInput.value = "";
+      refreshSelect();
+      refreshResults();
+    });
+
+    voteBtn.addEventListener('click', () => {
+      const option = voteSelect.value;
+      const voterId = voterIdInput.value.trim();
+      if (!voterId) {
+        alert("Please enter a voter ID.");
+        return;
+      }
+      const msg = vote(option, voterId);
+      alert(msg);
+      voterIdInput.value = "";
+      refreshResults();
+    });
+
+    // Initial few options
+    ["Turkey", "Morocco", "Malaysia"].forEach(opt => addOption(opt));
+    refreshSelect();
+    refreshResults();
+  </script>
+</body>
+</html>

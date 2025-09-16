@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortune Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f9d423, #ff4e50);
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 80px auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #ff4e50;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #e13d3f;
+    }
+
+    #fortuneOutput {
+      margin-top: 25px;
+      font-size: 18px;
+      color: #444;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔮 Fortune Generator</h1>
+    <button id="fortuneBtn">Get Your Fortune</button>
+    <p id="fortuneOutput"></p>
+  </div>
+
+  <script>
+    // Step 1: Initialize five fortune strings
+    const fortunes = [
+      "Your cat will look very cuddly today.",
+      "The weather will be nice tomorrow.",
+      "Be cautious of your new neighbors.",
+      "You will find a new hobby soon.",
+      "It would be wise to avoid the color red today."
+    ];
+
+    // Step 2: Get DOM elements
+    const fortuneBtn = document.getElementById("fortuneBtn");
+    const fortuneOutput = document.getElementById("fortuneOutput");
+
+    // Step 3: Show a random fortune on button click
+    fortuneBtn.addEventListener("click", function () {
+      let randomIndex = Math.floor(Math.random() * fortunes.length);
+      fortuneOutput.textContent = fortunes[randomIndex];
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Lookup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      padding: 40px 20px;
+      color: #333;
+    }
+    h1 {
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px;
+      border-radius: 15px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    input, select {
+      padding: 8px;
+      width: 80%;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: none;
+      background-color: #ff5722;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #e64a19;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #f1f1f1;
+      border-radius: 10px;
+      word-wrap: break-word;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contact Lookup</h1>
+  <div class="container">
+    <input type="text" id="nameInput" placeholder="Enter first name" />
+    <input type="text" id="propInput" placeholder="Enter property (e.g., number, likes)" />
+    <br>
+    <button onclick="lookup()">Lookup</button>
+
+    <div class="result" id="result">Result will appear here</div>
+  </div>
+
+  <script>
+    let contacts = [
+      { firstName: "Akira", lastName: "Laine", number: "0543236543", likes: ["Pizza", "Coding", "Brownie Points"] },
+      { firstName: "Harry", lastName: "Potter", number: "0994372684", likes: ["Hogwarts", "Magic", "Hagrid"] },
+      { firstName: "Sherlock", lastName: "Holmes", number: "0487345643", likes: ["Intriguing Cases", "Violin"] },
+      { firstName: "Kristian", lastName: "Vos", number: "unknown", likes: ["JavaScript", "Gaming", "Foxes"] }
+    ];
+
+    function lookUpProfile(name, prop) {
+      for (let contact of contacts) {
+        if (contact.firstName === name) {
+          if (contact.hasOwnProperty(prop)) {
+            return contact[prop];
+          } else {
+            return "No such property";
+          }
+        }
+      }
+      return "No such contact";
+    }
+
+    function lookup() {
+      const name = document.getElementById('nameInput').value.trim();
+      const prop = document.getElementById('propInput').value.trim();
+      if (!name || !prop) {
+        document.getElementById('result').textContent = "Please enter both name and property.";
+        return;
+      }
+      const result = lookUpProfile(name, prop);
+      if (Array.isArray(result)) {
+        document.getElementById('result').textContent = result.join(", ");
+      } else {
+        document.getElementById('result').textContent = result;
+      }
+    }
+  </script>
+</body>
+</html>

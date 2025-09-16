@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Ideas Board</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #84fab0, #8fd3f4);
+      margin: 0;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      padding: 25px;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .input-group input, .input-group textarea, .input-group select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #4a90e2;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #357ab8;
+    }
+
+    .ideas-list {
+      margin-top: 25px;
+    }
+
+    .idea {
+      border: 1px solid #ddd;
+      border-left: 6px solid #4a90e2;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background: #f9f9f9;
+      position: relative;
+    }
+
+    .idea h3 {
+      margin: 0 0 8px 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .pending { background: #ffb347; }
+    .success { background: #6fcf97; }
+    .failure { background: #eb5757; }
+
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #eb5757;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Project Ideas Board</h1>
+
+    <div class="input-group">
+      <label>Project Title</label>
+      <input type="text" id="title">
+    </div>
+
+    <div class="input-group">
+      <label>Description</label>
+      <textarea id="description" rows="3"></textarea>
+    </div>
+
+    <div class="input-group">
+      <label>Status</label>
+      <select id="status">
+        <option value="PENDING">Pending</option>
+        <option value="SUCCESS">Success</option>
+        <option value="FAILURE">Failure</option>
+      </select>
+    </div>
+
+    <button onclick="addIdea()">Add Project Idea</button>
+
+    <div class="ideas-list" id="ideasList"></div>
+  </div>
+
+  <script>
+    const projectStatus = {
+      PENDING: { description: "Pending Execution" },
+      SUCCESS: { description: "Executed Successfully" },
+      FAILURE: { description: "Execution Failed" }
+    };
+
+    class ProjectIdea {
+      constructor(title, description) {
+        this.title = title;
+        this.description = description;
+        this.status = projectStatus.PENDING;
+      }
+      updateProjectStatus(newStatus) {
+        this.status = newStatus;
+      }
+    }
+
+    class ProjectIdeaBoard {
+      constructor(title) {
+        this.title = title;
+        this.ideas = [];
+      }
+      pin(projectIdea) {
+        this.ideas.push(projectIdea);
+      }
+      unpin(projectIdea) {
+        this.ideas = this.ideas.filter(idea => idea !== projectIdea);
+      }
+      count() {
+        return this.ideas.length;
+      }
+      formatToString() {
+        let output = `${this.title} has ${this.count()} idea(s)\n`;
+        this.ideas.forEach(idea => {
+          output += `${idea.title} (${idea.status.description}) - ${idea.description}\n`;
+        });
+        return output;
+      }
+    }
+
+    const board = new ProjectIdeaBoard("Tech Projects Board");
+
+    function addIdea() {
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const statusKey = document.getElementById("status").value;
+
+      if (!title || !description) {
+        alert("Please enter both title and description");
+        return;
+      }
+
+      const idea = new ProjectIdea(title, description);
+      idea.updateProjectStatus(projectStatus[statusKey]);
+      board.pin(idea);
+      renderIdeas();
+
+      document.getElementById("title").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("status").value = "PENDING";
+    }
+
+    function removeIdea(index) {
+      board.ideas.splice(index, 1);
+      renderIdeas();
+    }
+
+    function renderIdeas() {
+      const container = document.getElementById("ideasList");
+      container.innerHTML = "";
+
+      board.ideas.forEach((idea, i) => {
+        const div = document.createElement("div");
+        div.className = "idea";
+        div.innerHTML = `
+          <h3>${idea.title}</h3>
+          <span class="status ${idea.status === projectStatus.PENDING ? "pending" : idea.status === projectStatus.SUCCESS ? "success" : "failure"}">${idea.status.description}</span>
+          <p>${idea.description}</p>
+          <button class="remove-btn" onclick="removeIdea(${i})">Remove</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>

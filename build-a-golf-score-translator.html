@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Golf Score Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #56ccf2, #2f80ed);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 80px auto;
+      background: #fff;
+      color: #333;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #2f80ed;
+    }
+
+    input {
+      padding: 10px;
+      margin: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 80px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    button {
+      background: #2f80ed;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2565c7;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      color: #333;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⛳ Golf Score Calculator</h1>
+    <div>
+      <input type="number" id="par" placeholder="Par">
+      <input type="number" id="strokes" placeholder="Strokes">
+    </div>
+    <button id="calcBtn">Check Score</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function golfScore(par, strokes) {
+      if (strokes === 1) {
+        return "Hole-in-one!";
+      } else if (strokes <= par - 2) {
+        return "Eagle";
+      } else if (strokes === par - 1) {
+        return "Birdie";
+      } else if (strokes === par) {
+        return "Par";
+      } else if (strokes === par + 1) {
+        return "Bogey";
+      } else if (strokes === par + 2) {
+        return "Double Bogey";
+      } else if (strokes >= par + 3) {
+        return "Go Home!";
+      }
+    }
+
+    const calcBtn = document.getElementById("calcBtn");
+    const result = document.getElementById("result");
+
+    calcBtn.addEventListener("click", function () {
+      const par = parseInt(document.getElementById("par").value);
+      const strokes = parseInt(document.getElementById("strokes").value);
+
+      if (isNaN(par) || isNaN(strokes)) {
+        result.textContent = "Please enter valid numbers for par and strokes.";
+        return;
+      }
+
+      result.textContent = golfScore(par, strokes);
+    });
+  </script>
+</body>
+</html>

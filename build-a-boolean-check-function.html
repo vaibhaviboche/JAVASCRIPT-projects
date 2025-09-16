@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boolean Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .app {
+      background: #fff;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 350px;
+      width: 100%;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #333;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>🔍 Boolean Checker</h1>
+    <input id="inputValue" placeholder="Type something (true, false, 1, etc.)" />
+    <button id="checkBtn">Check</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    // Function to check if a value is a boolean primitive
+    function booWho(value) {
+      return typeof value === "boolean";
+    }
+
+    const input = document.getElementById("inputValue");
+    const button = document.getElementById("checkBtn");
+    const result = document.getElementById("result");
+
+    button.addEventListener("click", () => {
+      let userInput = input.value.trim();
+
+      // Try to interpret "true" and "false" as booleans, numbers as numbers
+      let actualValue;
+      if (userInput === "true") actualValue = true;
+      else if (userInput === "false") actualValue = false;
+      else if (!isNaN(Number(userInput)) && userInput !== "") actualValue = Number(userInput);
+      else actualValue = userInput;
+
+      const isBool = booWho(actualValue);
+      result.textContent = isBool 
+        ? "✅ It is a boolean primitive." 
+        : "❌ It is NOT a boolean primitive.";
+    });
+  </script>
+</body>
+</html>

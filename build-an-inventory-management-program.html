@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 50px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button {
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin: 10px 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #357abd;
+    }
+
+    #log {
+      margin-top: 20px;
+      min-height: 40px;
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    ul {
+      margin-top: 15px;
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      background: #f1f1f1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛒 Inventory Manager</h1>
+
+    <input type="text" id="productName" placeholder="Product name">
+    <input type="number" id="productQuantity" placeholder="Quantity" min="1">
+
+    <div style="text-align: center;">
+      <button onclick="addProductUI()">Add Product</button>
+      <button onclick="removeProductUI()">Remove Product</button>
+      <button onclick="showInventoryUI()">Show Inventory</button>
+    </div>
+
+    <div id="log"></div>
+    <ul id="inventoryList"></ul>
+  </div>
+
+  <script>
+    let inventory = [];
+
+    function findProductIndex(productName) {
+      const name = productName.toLowerCase();
+      for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].name === name) return i;
+      }
+      return -1;
+    }
+
+    function addProduct(product) {
+      const name = product.name.toLowerCase();
+      const index = findProductIndex(name);
+
+      if (index !== -1) {
+        inventory[index].quantity += product.quantity;
+        return name + " quantity updated";
+      } else {
+        inventory.push({ name: name, quantity: product.quantity });
+        return name + " added to inventory";
+      }
+    }
+
+    function removeProduct(productName, quantity) {
+      const name = productName.toLowerCase();
+      const index = findProductIndex(name);
+
+      if (index === -1) return name + " not found";
+
+      const currentQty = inventory[index].quantity;
+
+      if (quantity > currentQty) {
+        return "Not enough " + name + " available, remaining pieces: " + currentQty;
+      } else if (quantity === currentQty) {
+        inventory.splice(index, 1);
+        return name + " removed completely from inventory";
+      } else {
+        inventory[index].quantity -= quantity;
+        return "Remaining " + name + " pieces: " + inventory[index].quantity;
+      }
+    }
+
+    function showInventory() {
+      return inventory.map(item => `${item.name}: ${item.quantity}`).join(", ");
+    }
+
+    // UI functions
+    const log = document.getElementById("log");
+    const inventoryList = document.getElementById("inventoryList");
+
+    function addProductUI() {
+      const name = document.getElementById("productName").value.trim();
+      const qty = parseInt(document.getElementById("productQuantity").value);
+
+      if (!name || isNaN(qty) || qty <= 0) {
+        log.textContent = "Enter valid product name and quantity.";
+        return;
+      }
+
+      log.textContent = addProduct({ name: name, quantity: qty });
+      document.getElementById("productName").value = "";
+      document.getElementById("productQuantity").value = "";
+      showInventoryUI();
+    }
+
+    function removeProductUI() {
+      const name = document.getElementById("productName").value.trim();
+      const qty = parseInt(document.getElementById("productQuantity").value);
+
+      if (!name || isNaN(qty) || qty <= 0) {
+        log.textContent = "Enter valid product name and quantity to remove.";
+        return;
+      }
+
+      log.textContent = removeProduct(name, qty);
+      document.getElementById("productName").value = "";
+      document.getElementById("productQuantity").value = "";
+      showInventoryUI();
+    }
+
+    function showInventoryUI() {
+      inventoryList.innerHTML = "";
+      if (inventory.length === 0) {
+        inventoryList.innerHTML = "<li>No items in inventory</li>";
+        return;
+      }
+      inventory.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name}: ${item.quantity}`;
+        inventoryList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

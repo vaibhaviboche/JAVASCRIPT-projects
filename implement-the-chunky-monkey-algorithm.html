@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chunk Array In Groups</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 440px;
+      text-align: center;
+    }
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #388E3C;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Chunk Array In Groups</h1>
+
+  <div class="container">
+    <input id="arrayInput" type="text" placeholder='Enter array (e.g. ["a","b","c","d"])' value='["a","b","c","d"]' />
+    <input id="sizeInput" type="number" placeholder="Enter chunk size" value="2" />
+    <button onclick="runChunk()">Chunk It</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function chunkArrayInGroups(arr, size) {
+      const result = [];
+      for (let i = 0; i < arr.length; i += size) {
+        result.push(arr.slice(i, i + size));
+      }
+      return result;
+    }
+
+    function runChunk() {
+      try {
+        const arr = JSON.parse(document.getElementById('arrayInput').value);
+        const size = parseInt(document.getElementById('sizeInput').value, 10);
+        const chunks = chunkArrayInGroups(arr, size);
+        document.getElementById('result').textContent = "Result:\n" + JSON.stringify(chunks, null, 2);
+      } catch (e) {
+        document.getElementById('result').textContent = "❌ Invalid input. Please enter a valid array.";
+      }
+    }
+  </script>
+
+</body>
+</html>

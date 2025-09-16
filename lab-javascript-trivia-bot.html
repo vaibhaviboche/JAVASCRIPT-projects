@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TriviaBot Fun Facts</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #333;
+    }
+    h1 {
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+    }
+    .chat-box {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px 25px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .message {
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      background: #f1f1f1;
+      line-height: 1.5;
+    }
+    .message.bot {
+      background: #e0f7fa;
+      border-left: 5px solid #00acc1;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 14px;
+      color: #fff;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 TriviaBot - Coding Fun Facts</h1>
+  <div class="chat-box" id="chatBox"></div>
+
+  <div class="footer">Made with 💻 &nbsp; in the JavaScript Galaxy</div>
+
+  <script>
+    // Bot identity variables
+    var botName = "TriviaBot";
+    var botLocation = "JavaScript Galaxy";
+    var favoriteLanguage = "JavaScript";
+
+    // Messages to display
+    const messages = [
+      "Hello! I'm your coding fun fact guide!",
+      "My name is " + botName + " and I live on " + botLocation + ".",
+      "My favorite programming language is " + favoriteLanguage + ".",
+      favoriteLanguage + " was created in just 10 days!",
+      favoriteLanguage + " is used both on the frontend and backend.",
+      favoriteLanguage + " can be run in the browser and on servers with Node.js.",
+      "It was fun sharing these facts with you. Goodbye! - " + botName + " from " + botLocation + "."
+    ];
+
+    // Function to print messages one by one
+    const chatBox = document.getElementById("chatBox");
+    let i = 0;
+
+    function showNextMessage() {
+      if (i < messages.length) {
+        const msg = document.createElement("div");
+        msg.className = "message bot";
+        msg.textContent = messages[i];
+        chatBox.appendChild(msg);
+        i++;
+        setTimeout(showNextMessage, 1200);
+      }
+    }
+
+    // Start showing messages
+    showNextMessage();
+  </script>
+</body>
+</html>

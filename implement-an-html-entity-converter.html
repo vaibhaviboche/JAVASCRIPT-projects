@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convert HTML Entities</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 400px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #388E3C;
+    }
+    #output {
+      margin-top: 25px;
+      font-size: 18px;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 400px;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Convert HTML Entities</h1>
+  <p>Type a string containing special characters like &lt;, &gt;, &amp; , etc.</p>
+
+  <input type="text" id="inputStr" value='Dolce & Gabbana'>
+  <button onclick="runConvert()">Convert</button>
+
+  <div id="output"></div>
+
+  <script>
+    function convertHTML(str) {
+      const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&apos;"
+      };
+      return str.replace(/[&<>"']/g, char => entities[char]);
+    }
+
+    function runConvert() {
+      const input = document.getElementById('inputStr').value;
+      const result = convertHTML(input);
+      document.getElementById('output').textContent = "Converted: " + result;
+    }
+  </script>
+
+</body>
+</html>

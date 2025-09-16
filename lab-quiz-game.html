@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Quiz Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      background: rgba(0,0,0,0.3);
+      padding: 25px 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: none;
+      background-color: #ff9800;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #e68900;
+    }
+    .result {
+      margin-top: 15px;
+      background: rgba(255,255,255,0.1);
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Computer Quiz Simulator</h1>
+    <button onclick="runQuiz()">Ask a Question</button>
+    <div id="question"></div>
+    <div id="computer-choice"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { category: "Science", question: "What is the chemical symbol for water?", choices: ["H2O", "O2", "CO2"], answer: "H2O" },
+      { category: "Geography", question: "Which is the largest continent by land area?", choices: ["Asia", "Africa", "Europe"], answer: "Asia" },
+      { category: "History", question: "Who was the first President of the United States?", choices: ["George Washington", "Abraham Lincoln", "Thomas Jefferson"], answer: "George Washington" },
+      { category: "Math", question: "What is the square root of 64?", choices: ["6", "8", "10"], answer: "8" },
+      { category: "Sports", question: "How many players are there in a soccer team on the field?", choices: ["9", "11", "13"], answer: "11" }
+    ];
+
+    function getRandomQuestion(questionsArray) {
+      const randomIndex = Math.floor(Math.random() * questionsArray.length);
+      return questionsArray[randomIndex];
+    }
+
+    function getRandomComputerChoice(choicesArray) {
+      const randomIndex = Math.floor(Math.random() * choicesArray.length);
+      return choicesArray[randomIndex];
+    }
+
+    function getResults(questionObj, computerChoice) {
+      if (computerChoice === questionObj.answer) {
+        return "The computer's choice is correct!";
+      } else {
+        return `The computer's choice is wrong. The correct answer is: ${questionObj.answer}`;
+      }
+    }
+
+    function runQuiz() {
+      const q = getRandomQuestion(questions);
+      const compChoice = getRandomComputerChoice(q.choices);
+
+      document.getElementById("question").textContent = `Question (${q.category}): ${q.question}`;
+      document.getElementById("computer-choice").textContent = `Computer chose: ${compChoice}`;
+      document.getElementById("result").textContent = getResults(q, compChoice);
+    }
+  </script>
+</body>
+</html>

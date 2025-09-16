@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Truncator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #ff6a00, #ee0979);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: rgba(0,0,0,0.4);
+      padding: 25px 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      width: 85%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      background-color: #00c6ff;
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #0072ff;
+      color: #fff;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      background: rgba(255,255,255,0.2);
+      padding: 10px;
+      border-radius: 8px;
+      word-wrap: break-word;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>String Truncator</h2>
+
+    <label>Enter a string:</label>
+    <input type="text" id="inputString" placeholder="Type your string here">
+
+    <label>Enter max length:</label>
+    <input type="number" id="inputNum" placeholder="Enter max number of characters">
+
+    <button onclick="truncateInput()">Truncate String</button>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    function truncateString(str, num) {
+      if (str.length > num) {
+        return str.slice(0, num) + "...";
+      } else {
+        return str;
+      }
+    }
+
+    function truncateInput() {
+      const str = document.getElementById("inputString").value;
+      const num = parseInt(document.getElementById("inputNum").value);
+
+      if (!str) {
+        document.getElementById("result").textContent = "Please enter a string.";
+        return;
+      }
+      if (isNaN(num) || num < 0) {
+        document.getElementById("result").textContent = "Please enter a valid number.";
+        return;
+      }
+
+      const truncated = truncateString(str, num);
+      document.getElementById("result").textContent = `Truncated string: ${truncated}`;
+    }
+  </script>
+</body>
+</html>

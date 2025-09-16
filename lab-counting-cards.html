@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 400px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e7e34;
+    }
+    #log {
+      margin-top: 20px;
+      font-size: 16px;
+      text-align: left;
+      white-space: pre-wrap;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Card Counter (cc)</h1>
+
+  <div class="container">
+    <input id="cardInput" type="text" placeholder='Enter card (e.g. 2, 3, J, Q, A)' />
+    <button onclick="playCard()">Count Card</button>
+    <div id="result"></div>
+    <div id="log"></div>
+  </div>
+
+  <script>
+    let count = 0; // Global count
+
+    function cc(card) {
+      if ([2, 3, 4, 5, 6].includes(card)) {
+        count++;
+      } else if ([10, "J", "Q", "K", "A"].includes(card)) {
+        count--;
+      }
+      return count > 0 ? `${count} Bet` : `${count} Hold`;
+    }
+
+    function playCard() {
+      const input = document.getElementById('cardInput').value.trim();
+      if (!input) return;
+
+      // Convert to number if numeric
+      const card = isNaN(input) ? input.toUpperCase() : Number(input);
+
+      const decision = cc(card);
+
+      document.getElementById('result').textContent = `Current: ${decision}`;
+      document.getElementById('log').textContent += `Card: ${card} → ${decision}\n`;
+
+      document.getElementById('cardInput').value = "";
+      document.getElementById('cardInput').focus();
+    }
+  </script>
+
+</body>
+</html>

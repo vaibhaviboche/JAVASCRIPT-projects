@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.0">
+  <title>Bookmark Manager</title>
+  <style>
+    :root {
+      --light-grey: #f5f6f7;
+      --dark-grey: #0a0a23;
+      --yellow: #f1be32;
+      --golden-yellow: #feac32;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+    }
+
+    body {
+      background-color: var(--dark-grey);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    select,
+    input,
+    label {
+      margin-left: 10px;
+    }
+
+    div {
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .close-form-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    h1,
+    h2 {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #category-list {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background-color: var(--light-grey);
+      align-self: center;
+      width: 80%;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+
+    #category-list,
+    h1,
+    h2,
+    label {
+      color: var(--light-grey);
+    }
+
+    #category-list p {
+      color: var(--dark-grey);
+    }
+
+    button {
+      cursor: pointer;
+      padding: 5px;
+      width: 100px;
+      margin: 10px;
+      color: var(--dark-grey);
+      background-color: var(--golden-yellow);
+      background-image: linear-gradient(#fecc4c, #ffac33);
+      border-color: var(--golden-yellow);
+      border-width: 3px;
+    }
+
+    button:hover {
+      background-image: linear-gradient(#ffcc4c, #f89808);
+    }
+
+    section {
+      margin-top: 60px;
+      border: 2px solid var(--golden-yellow);
+      width: fit-content;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <section id="main-section">
+      <h1>Bookmark Manager</h1>
+      <div id="dropdown">
+        <label for="category-dropdown">Select a category:</label>
+        <select id="category-dropdown" name="options">
+          <option value="news" selected>News</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="work">Work</option>
+          <option value="miscellaneous">Miscellaneous</option>
+        </select>
+      </div>
+      <div id="buttons">
+        <button type="button" id="view-category-button">View Category</button>
+        <button type="button" id="add-bookmark-button">Add Bookmark</button>
+      </div>
+    </section>
+
+    <section id="form-section" class="hidden">
+      <form>
+        <h2 class="category-name"></h2>
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name">
+        </div>
+        <div>
+          <label for="url">URL:</label>
+          <input type="text" id="url">
+        </div>
+        <div>
+          <button type="button" id="close-form-button">Go Back</button>
+          <button type="button" id="add-bookmark-button-form">Add Bookmark</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="bookmark-list-section" class="hidden">
+      <h2 class="category-name"></h2>
+      <div id="category-list"></div>
+      <div>
+        <button type="button" id="close-list-button">Go Back</button>
+        <button type="button" id="delete-bookmark-button">Delete Bookmark</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // === Utility ===
+    function getBookmarks() {
+      try {
+        let data = localStorage.getItem("bookmarks");
+        if (!data) return [];
+        let parsed = JSON.parse(data);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(
+          (b) => b && typeof b.name === "string" && typeof b.category === "string" && typeof b.url === "string"
+        );
+      } catch {
+        return [];
+      }
+    }
+
+    function saveBookmarks(bookmarks) {
+      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+    }
+
+    // === Toggling Sections ===
+    function displayOrCloseForm() {
+      document.getElementById("main-section").classList.toggle("hidden");
+      document.getElementById("form-section").classList.toggle("hidden");
+    }
+
+    function displayOrHideCategory() {
+      document.getElementById("main-section").classList.toggle("hidden");
+      document.getElementById("bookmark-list-section").classList.toggle("hidden");
+    }
+
+    // === Elements ===
+    const categoryDropdown = document.getElementById("category-dropdown");
+    const categoryNameEls = document.querySelectorAll(".category-name");
+    const addBookmarkBtn = document.getElementById("add-bookmark-button");
+    const closeFormBtn = document.getElementById("close-form-button");
+    const addBookmarkFormBtn = document.getElementById("add-bookmark-button-form");
+    const viewCategoryBtn = document.getElementById("view-category-button");
+    const closeListBtn = document.getElementById("close-list-button");
+    const deleteBookmarkBtn = document.getElementById("delete-bookmark-button");
+
+    const nameInput = document.getElementById("name");
+    const urlInput = document.getElementById("url");
+    const categoryList = document.getElementById("category-list");
+
+    // === Event Listeners ===
+
+    // Open Add Bookmark Form
+    addBookmarkBtn.addEventListener("click", () => {
+      const selected = categoryDropdown.value;
+      categoryNameEls.forEach((el) => (el.textContent = selected));
+      displayOrCloseForm();
+    });
+
+    // Close Form
+    closeFormBtn.addEventListener("click", () => {
+      displayOrCloseForm();
+    });
+
+    // Add Bookmark from Form
+    addBookmarkFormBtn.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      const category = categoryDropdown.value;
+      const url = urlInput.value.trim();
+
+      if (name && url) {
+        const bookmarks = getBookmarks();
+        bookmarks.push({ name, category, url });
+        saveBookmarks(bookmarks);
+      }
+
+      // Reset inputs
+      nameInput.value = "";
+      urlInput.value = "";
+
+      displayOrCloseForm();
+    });
+
+    // === View Category ===
+    viewCategoryBtn.addEventListener("click", () => {
+      const selected = categoryDropdown.value;
+      categoryNameEls.forEach((el) => (el.textContent = selected));
+
+      const bookmarks = getBookmarks().filter((b) => b.category === selected);
+
+      if (bookmarks.length === 0) {
+        categoryList.innerHTML = "<p>No Bookmarks Found</p>";
+      } else {
+        categoryList.innerHTML = bookmarks
+          .map(
+            (b) => `
+          <div>
+            <input type="radio" id="${b.name}" name="bookmark" value="${b.name}">
+            <label for="${b.name}">
+              <a href="${b.url}" target="_blank">${b.name}</a>
+            </label>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      displayOrHideCategory();
+    });
+
+    // === Delete Selected Bookmark ===
+    deleteBookmarkBtn.addEventListener("click", () => {
+      const selectedRadio = document.querySelector("input[name='bookmark']:checked");
+      if (!selectedRadio) return;
+
+      const selectedCategory = categoryDropdown.value;
+      const selectedName = selectedRadio.value;
+
+      let bookmarks = getBookmarks();
+      bookmarks = bookmarks.filter(
+        (b) => !(b.category === selectedCategory && b.name === selectedName)
+      );
+      saveBookmarks(bookmarks);
+
+      // Refresh category list
+      const updated = bookmarks.filter((b) => b.category === selectedCategory);
+      if (updated.length === 0) {
+        categoryList.innerHTML = "<p>No Bookmarks Found</p>";
+      } else {
+        categoryList.innerHTML = updated
+          .map(
+            (b, idx) => `
+          <div>
+            <input type="radio" id="bookmark-${idx}" name="bookmark" value="${b.name}">
+            <label for="bookmark-${idx}">
+              <a href="${b.url}" target="_blank">${b.name}</a>
+            </label>
+          </div>
+        `
+          )
+          .join("");
+      }
+    });
+
+    // Close Category List
+    closeListBtn.addEventListener("click", () => {
+      displayOrHideCategory();
+    });
+  </script>
+</body>
+
+</html>

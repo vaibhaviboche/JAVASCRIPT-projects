@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Masker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 80px auto;
+      background: #fff;
+      color: #333;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #f8b500;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      background: #f8b500;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #e0a500;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      color: #333;
+      min-height: 40px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✉️ Email Masker</h1>
+    <input type="email" id="emailInput" placeholder="Enter your email">
+    <br>
+    <button id="maskBtn">Mask Email</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function maskEmail(email) {
+      const atIndex = email.indexOf("@");
+      if (atIndex === -1) return "Invalid email";
+
+      const username = email.slice(0, atIndex);
+      const domain = email.slice(atIndex);
+
+      if (username.length <= 2) return email;
+
+      const firstChar = username[0];
+      const lastChar = username[username.length - 1];
+      const maskedMiddle = "*".repeat(username.length - 2);
+
+      return firstChar + maskedMiddle + lastChar + domain;
+    }
+
+    const input = document.getElementById("emailInput");
+    const button = document.getElementById("maskBtn");
+    const result = document.getElementById("result");
+
+    button.addEventListener("click", () => {
+      const email = input.value.trim();
+      if (!email) {
+        result.textContent = "Please enter a valid email.";
+        return;
+      }
+
+      result.textContent = maskEmail(email);
+    });
+  </script>
+</body>
+</html>

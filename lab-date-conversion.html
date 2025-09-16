@@ -1,0 +1,31 @@
+// 1. Create a variable named currentDate
+const currentDate = new Date();
+
+// 2. Create a variable named currentDateFormat
+const currentDateFormat = `Current Date and Time: ${currentDate.toString()}`;
+
+// 3. Log currentDateFormat to the console
+console.log(currentDateFormat);
+
+// 4. Create formatDateMMDDYYYY function
+function formatDateMMDDYYYY(dateObj) {
+  const month = dateObj.getMonth() + 1; // getMonth() is zero-indexed
+  const day = dateObj.getDate();
+  const year = dateObj.getFullYear();
+  return `Formatted Date (MM/DD/YYYY): ${month}/${day}/${year}`;
+}
+
+// 7. Create formatDateLong function
+function formatDateLong(dateObj) {
+  const formatted = dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+  return `Formatted Date (Month Day, Year): ${formatted}`;
+}
+console.log(formatDateMMDDYYYY(currentDate));
+console.log(formatDateLong(currentDate));
+
+
+

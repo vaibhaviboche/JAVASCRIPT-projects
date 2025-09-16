@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm Ending Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 420px;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 8px 0;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #388E3C;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Confirm Ending Checker</h1>
+
+  <div class="container">
+    <input type="text" id="mainStr" placeholder="Enter main string" value="Bastian" />
+    <input type="text" id="targetStr" placeholder="Enter target ending" value="n" />
+    <button onclick="checkEnding()">Check</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function confirmEnding(str, target) {
+      return str.slice(-target.length) === target;
+    }
+
+    function checkEnding() {
+      const main = document.getElementById('mainStr').value;
+      const target = document.getElementById('targetStr').value;
+      const result = confirmEnding(main, target);
+      document.getElementById('result').textContent =
+        result ? "✅ It ends with '" + target + "'" : "❌ It does not end with '" + target + "'";
+    }
+  </script>
+
+</body>
+</html>

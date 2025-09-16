@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Update Records Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #444;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin: 10px 0 4px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Record Collection Editor</h1>
+  <div class="container">
+    <label for="id">Album ID:</label>
+    <select id="id">
+      <option value="2548">2548</option>
+      <option value="2468">2468</option>
+      <option value="1245">1245</option>
+      <option value="5439">5439</option>
+    </select>
+
+    <label for="prop">Property:</label>
+    <select id="prop">
+      <option value="artist">artist</option>
+      <option value="albumTitle">albumTitle</option>
+      <option value="tracks">tracks</option>
+    </select>
+
+    <label for="value">Value:</label>
+    <input type="text" id="value" placeholder="Enter a value or leave empty to delete">
+
+    <button id="updateBtn">Update Record</button>
+
+    <h2>Current Records:</h2>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    // Initial records object
+    const records = {
+      2548: {
+        albumTitle: "Slippery When Wet",
+        artist: "Bon Jovi",
+        tracks: ["Let It Rock", "You Give Love a Bad Name"]
+      },
+      2468: {
+        albumTitle: "1999",
+        artist: "Prince",
+        tracks: ["1999", "Little Red Corvette"]
+      },
+      1245: {
+        artist: "Robert Palmer",
+        tracks: []
+      },
+      5439: {
+        albumTitle: "ABBA Gold"
+      }
+    };
+
+    // updateRecords function (your logic)
+    function updateRecords(records, id, prop, value) {
+      if (value === "") {
+        delete records[id][prop];
+      } else if (prop !== "tracks") {
+        records[id][prop] = value;
+      } else {
+        if (!records[id].hasOwnProperty("tracks")) {
+          records[id]["tracks"] = [];
+        }
+        records[id]["tracks"].push(value);
+      }
+      return records;
+    }
+
+    // UI logic
+    const idInput = document.getElementById('id');
+    const propInput = document.getElementById('prop');
+    const valueInput = document.getElementById('value');
+    const output = document.getElementById('output');
+    const updateBtn = document.getElementById('updateBtn');
+
+    function renderRecords() {
+      output.textContent = JSON.stringify(records, null, 2);
+    }
+
+    updateBtn.addEventListener('click', () => {
+      updateRecords(records, idInput.value, propInput.value, valueInput.value);
+      renderRecords();
+      valueInput.value = "";
+    });
+
+    renderRecords();
+  </script>
+</body>
+</html>
