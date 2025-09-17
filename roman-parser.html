@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roman Numeral Parser</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 450px;
+    }
+    h1 {
+      text-align: center;
+      color: #d35400;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #e67e22;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #d35400;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+      color: #333;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Roman Numeral Parser</h1>
+    <input type="text" id="romanInput" placeholder="Enter Roman numeral (e.g. MCMXC)">
+    <button onclick="convertRoman()">Convert</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function parseRomanNumeral(s) {
+      const roman = {
+        I: 1, V: 5, X: 10, L: 50,
+        C: 100, D: 500, M: 1000
+      };
+
+      let total = 0;
+      let prev = 0;
+
+      for (let i = s.length - 1; i >= 0; i--) {
+        const value = roman[s[i]];
+        if (!value) return NaN;
+        if (value < prev) {
+          total -= value;
+        } else {
+          total += value;
+        }
+        prev = value;
+      }
+
+      return total;
+    }
+
+    function convertRoman() {
+      const input = document.getElementById('romanInput').value.trim().toUpperCase();
+      const output = document.getElementById('output');
+
+      if (!input) {
+        output.textContent = "⚠️ Please enter a Roman numeral.";
+        return;
+      }
+
+      const result = parseRomanNumeral(input);
+      if (isNaN(result)) {
+        output.textContent = "❌ Invalid Roman numeral.";
+      } else {
+        output.textContent = `✅ Decimal value: ${result}`;
+      }
+    }
+  </script>
+</body>
+</html>

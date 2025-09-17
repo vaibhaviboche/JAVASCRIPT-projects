@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pangram Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 420px;
+      text-align: center;
+    }
+    h1 {
+      color: #d35400;
+      margin-bottom: 20px;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      color: white;
+      background: #e67e22;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background: #ca6f1e;
+    }
+    #result {
+      font-size: 18px;
+      color: #333;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pangram Checker</h1>
+    <textarea id="sentence" rows="3" placeholder="Enter your sentence here..."></textarea>
+    <input type="text" id="letters" placeholder="Enter allowed letters (e.g. abcdef...)">
+    <button onclick="checkPangram()">Check</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function isPangram(sentence, letters) {
+      const filtered = sentence
+        .toLowerCase()
+        .split('')
+        .filter(ch => ch >= 'a' && ch <= 'z');
+
+      const usedSet = new Set(filtered);
+      const allowedSet = new Set(letters);
+
+      if (usedSet.size !== allowedSet.size) return false;
+
+      for (let ch of usedSet) {
+        if (!allowedSet.has(ch)) return false;
+      }
+
+      return true;
+    }
+
+    function checkPangram() {
+      const sentence = document.getElementById("sentence").value;
+      const letters = document.getElementById("letters").value.toLowerCase().replace(/[^a-z]/g,'');
+      const result = document.getElementById("result");
+
+      if (!sentence.trim() || !letters.trim()) {
+        result.textContent = "⚠️ Please enter both a sentence and allowed letters.";
+        return;
+      }
+
+      const isValid = isPangram(sentence, letters);
+      result.textContent = isValid 
+        ? "✅ This is a valid pangram using only the allowed letters." 
+        : "❌ This is NOT a valid pangram with the given letters.";
+    }
+  </script>
+</body>
+</html>

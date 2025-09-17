@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Missing Numbers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 500px;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2e86c1;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      min-height: 40px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Find Missing Numbers</h1>
+    <input id="arrayInput" placeholder='Enter an array of numbers, e.g. [1,3,5]'>
+    <button onclick="computeMissing()">Find Missing Numbers</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function findMissingNumbers(arr) {
+      if (arr.length === 0) return [];
+
+      const max = Math.max(...arr);
+      const present = new Set(arr);
+      const missing = [];
+
+      for (let i = 1; i <= max; i++) {
+        if (!present.has(i)) {
+          missing.push(i);
+        }
+      }
+
+      return missing;
+    }
+
+    function computeMissing() {
+      const input = document.getElementById('arrayInput').value.trim();
+      const resultDiv = document.getElementById('result');
+
+      try {
+        const arr = JSON.parse(input);
+
+        if (!Array.isArray(arr) || !arr.every(n => Number.isInteger(n))) {
+          resultDiv.textContent = "❌ Please enter a valid array of integers.";
+          return;
+        }
+
+        const missing = findMissingNumbers(arr);
+        resultDiv.textContent = missing.length === 0 
+          ? "✅ No missing numbers!" 
+          : "✅ Missing numbers: " + JSON.stringify(missing);
+      } catch {
+        resultDiv.textContent = "❌ Invalid input. Use JSON array format like [1,3,5]";
+      }
+    }
+  </script>
+</body>
+</html>

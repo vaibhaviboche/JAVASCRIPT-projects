@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tribonacci Sequence Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f8fa;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    input[type="number"] {
+      width: 30%;
+      padding: 8px;
+      margin-right: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+    #length {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      color: white;
+      background: #3498db;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .output {
+      background: #ecf0f1;
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 80px;
+      font-size: 15px;
+      color: #333;
+      white-space: pre-line;
+    }
+    .start-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Tribonacci Generator</h1>
+
+    <label class="start-label">Enter first 3 numbers:</label>
+    <div>
+      <input type="number" id="start1" placeholder="0">
+      <input type="number" id="start2" placeholder="0">
+      <input type="number" id="start3" placeholder="1">
+    </div>
+
+    <label class="start-label">Enter length:</label>
+    <input type="number" id="length" placeholder="e.g. 20">
+
+    <button onclick="generateTribonacci()">Generate Sequence</button>
+
+    <div class="output" id="output">
+      Your sequence will appear here...
+    </div>
+  </div>
+
+  <script>
+    function tribonacciSequence(start, length) {
+      if (length === 0) return [];
+      if (length <= 3) return start.slice(0, length);
+
+      const result = [...start];
+      while (result.length < length) {
+        const next = result[result.length - 1] + result[result.length - 2] + result[result.length - 3];
+        result.push(next);
+      }
+      return result;
+    }
+
+    function generateTribonacci() {
+      const s1 = parseFloat(document.getElementById("start1").value) || 0;
+      const s2 = parseFloat(document.getElementById("start2").value) || 0;
+      const s3 = parseFloat(document.getElementById("start3").value) || 1;
+      const len = parseInt(document.getElementById("length").value);
+
+      if (!len || len < 0) {
+        document.getElementById("output").textContent = "⚠️ Please enter a valid length.";
+        return;
+      }
+
+      const sequence = tribonacciSequence([s1, s2, s3], len);
+      document.getElementById("output").textContent = "📈 Sequence:\n" + sequence.join(", ");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Rotator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 500px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: none;
+      margin-bottom: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2e86c1;
+    }
+    #output {
+      margin-top: 25px;
+      padding: 15px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 16px;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Matrix Rotator (90°)</h1>
+    <textarea id="matrixInput" placeholder="Enter a square matrix, e.g. [[1,2,3],[4,5,6],[7,8,9]]"></textarea>
+    <button onclick="rotateMatrix()">Rotate</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function rotate(matrix) {
+      const n = matrix.length;
+      const rotated = [];
+      for (let col = 0; col < n; col++) {
+        const newRow = [];
+        for (let row = n - 1; row >= 0; row--) {
+          newRow.push(matrix[row][col]);
+        }
+        rotated.push(newRow);
+      }
+      return rotated;
+    }
+
+    function rotateMatrix() {
+      const input = document.getElementById('matrixInput').value.trim();
+      const output = document.getElementById('output');
+      if (!input) {
+        output.textContent = "⚠️ Please enter a matrix.";
+        return;
+      }
+      try {
+        const matrix = JSON.parse(input);
+        if (!Array.isArray(matrix) || matrix.some(r => !Array.isArray(r) || r.length !== matrix.length)) {
+          output.textContent = "❌ Input must be a square matrix (same number of rows and columns).";
+          return;
+        }
+        const rotated = rotate(matrix);
+        output.textContent = "✅ Rotated Matrix:\n" + JSON.stringify(rotated);
+      } catch (err) {
+        output.textContent = "❌ Invalid JSON format. Use [[1,2],[3,4]] etc.";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thermostat Adjustment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #c2e59c, #64b3f4);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #e67e22;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #d35400;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      min-height: 40px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Thermostat Adjustment</h1>
+    <input id="currentTemp" type="number" step="0.1" placeholder="Current temperature">
+    <input id="targetTemp" type="number" step="0.1" placeholder="Target temperature">
+    <button onclick="adjust()">Check Adjustment</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function adjustThermostat(temp, target) {
+      if (temp < target) return "heat";
+      else if (temp > target) return "cool";
+      else return "hold";
+    }
+
+    function adjust() {
+      const temp = parseFloat(document.getElementById('currentTemp').value);
+      const target = parseFloat(document.getElementById('targetTemp').value);
+      const resultDiv = document.getElementById('result');
+
+      if (isNaN(temp) || isNaN(target)) {
+        resultDiv.textContent = "❌ Please enter valid numbers for both temperatures.";
+        return;
+      }
+
+      const action = adjustThermostat(temp, target);
+      resultDiv.textContent = `⚡ Action: ${action.toUpperCase()}`;
+    }
+  </script>
+</body>
+</html>
